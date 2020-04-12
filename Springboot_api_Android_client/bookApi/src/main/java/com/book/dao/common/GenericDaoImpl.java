@@ -2,17 +2,13 @@ package com.book.dao.common;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 
 /**
  * JPA implementation of the GenericRepository.
@@ -28,18 +24,12 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
 
     private final Class<T> persistentClass;
 
-    private Logger log = Logger.getLogger(getClass());
-
-    //@PersistenceContext
-   // protected SessionFactory sessionFactory;
-
     @PersistenceContext
     private EntityManager em;
 
     protected Session getSession() {
         Session session = em.unwrap(Session.class);
         return session;
-       // return sessionFactory.getCurrentSession();
     }
 
     @SuppressWarnings("unchecked")
