@@ -39,53 +39,52 @@ public class Student implements Serializable {
     @Column(name = "dob")
     private String dateOfBirth;
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Gender getGender() {
+        return gender;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 
-	public Gender getGender() {
-		return gender;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
-	public String getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
 }

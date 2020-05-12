@@ -1,0 +1,91 @@
+<body class="hold-transition register-page">
+<div class="register-logo">
+    <p><b>Sample</b>CRUD</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Register a new User</p>
+
+      <form [formGroup]="userForm" novalidate>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" formControlName="fullname" #fullname placeholder="Full name">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+
+          <div *ngIf="userForm.controls['fullname'].invalid && (userForm.controls['fullname'].dirty || userForm.controls['fullname'].touched)" class="alert alert-danger">
+        <div *ngIf="userForm.controls['fullname'].errors.required">
+          Full Name is required.
+        </div>
+      </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" formControlName="username" #username placeholder="Username">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+
+           <div *ngIf="userForm.controls['username'].invalid && (userForm.controls['username'].dirty || userForm.controls['username'].touched)" class="alert alert-danger">
+        <div *ngIf="userForm.controls['username'].errors.required">
+          User Name is required.
+        </div>
+      </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" formControlName="password" #password  placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+
+           <div *ngIf="userForm.controls['password'].invalid && (userForm.controls['password'].dirty || userForm.controls['password'].touched)" class="alert alert-danger">
+        <div *ngIf="userForm.controls['password'].errors.required">
+          Password is required.
+        </div>
+      </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" formControlName="password2" #password2 placeholder="Retype password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+           <div *ngIf="userForm.controls['password2'].invalid && (userForm.controls['password2'].dirty || userForm.controls['password2'].touched)" class="alert alert-danger">
+        <div *ngIf="userForm.controls['password2'].errors.required">
+          Password is required.
+        </div>
+      </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+              <label for="agreeTerms">  
+               I agree to the terms
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" [disabled]="userForm.pristine || userForm.invalid"
+        (click) = "onUserFormSubmit()" class="btn btn-primary btn-block">save</button>
+          </div>
+          <div *ngIf="notSuccessfully" class="error">
+        <div class="alert alert-danger">{{msg}}</div>
+      </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <a href="/login" class="text-center">I already have an account</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+  </body>

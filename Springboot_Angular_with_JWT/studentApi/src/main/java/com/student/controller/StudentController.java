@@ -27,17 +27,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/students")
 @CrossOrigin
 public class StudentController {
-
+    
     @Autowired
     private StudentDaoImpl studentdao;
 
-    // -------------------Retrieve All
-    // Students---------------------------------------------
+    // -------------------Retrieve All Students---------------------------------------------
 
-    @GetMapping(value = "/", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/", produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<Student> listAllStudents() {
-        List<Student> students = studentdao.getStudents();
+          List<Student> students = studentdao.getStudents();
         return students;
     }
 
@@ -47,64 +46,54 @@ public class StudentController {
     public ResponseEntity<?> getStudent(@PathVariable("id") Long id) {
         Student student = studentdao.findById(id);
         if (student == null) {
-            return new ResponseEntity<Response>(new Response(false, "Student with id " + id + " not found!!"),
-                    HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Response>(new Response(false, "Student with id "+id+" not found!!", null, null), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Student>(student, HttpStatus.OK);
     }
 
     // -------------------Create a Student-------------------------------------------
-
+   
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createStudent(@RequestBody Student student, UriComponentsBuilder ucBuilder)
-            throws Exception {
-
+    public ResponseEntity<?> createStudent(@RequestBody Student student, UriComponentsBuilder ucBuilder) {
         try {
             studentdao.save(student);
-            return new ResponseEntity<Response>(new Response(true, "Successfully Created Student !!"),
-                    HttpStatus.CREATED);
+        return new ResponseEntity<Response>(new Response(true, "Successfully Created Student !!", null, null), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + e.getMessage()),
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    // ------------------- Update a Student -------------------------------
-
+    // ------------------- Update a Student ------------------------------------------------
+   
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) throws Exception {
+    public ResponseEntity<?> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) {
         try {
             Student currentStudent = studentdao.findById(id);
-            student.setId(id);
-            if (currentStudent == null) {
-                return new ResponseEntity<Response>(new Response(false, "Student with id " + id + " not found !!"),
-                        HttpStatus.NOT_FOUND);
-            }
-            studentdao.save(student);
-            return new ResponseEntity<Response>(new Respnse(true, "Successfully Updated Student."), HttpStatus.OK);
+        student.setId(id);
+        if (currentStudent == null) {
+            return new ResponseEntity<Response>(new Response(false, "Student with id "+id+" not found !!", null, null), HttpStatus.NOT_FOUND);
+        }
+        studentdao.save(student);
+        return new ResponseEntity<Response>(new Response(true, "Successfully Updated Student.", null, null), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + e.getMessage()),
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
         }
     }
 
     // ------------------- Delete a Student-----------------------------------------
    
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) throws Exception {
-
+    public ResponseEntity<?> deleteStudent(@PathVariable("id") Long id) {
         try {
             Student student = studentdao.findById(id);
-            if (student == null) {
-                return new ResponseEntity<Response>(new Response(false, "Student with id " + id + " not found !!"),
-                        HttpStatus.NOT_FOUND);
-            }
-            studentdao.delete(student);
-            return new ResponseEntity<Response>(new Response(true, "Successfully Removed Student."), HttpStatus.OK);
+        if (student == null) {
+            return new ResponseEntity<Response>(new Response(false, "Student with id "+id+" not found !!", null, null), HttpStatus.NOT_FOUND);
+        }
+        studentdao.delete(student);
+        return new ResponseEntity<Response>(new Response(true, "Successfully Removed Student.", null, null), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + e.getMessage()),
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
         }
     }
 }

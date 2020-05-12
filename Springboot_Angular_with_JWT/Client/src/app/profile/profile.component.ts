@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import Student from '../Student';
 import { DatePipe } from '@angular/common';
+import { GlobalserviceService } from '../globalservice.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ export class ProfileComponent implements OnInit {
   student: Student;
   student_id: string;
   students: Student[];
-  constructor(private fb: FormBuilder, private ss: StudentService, private router: Router, public datepipe: DatePipe) {
+  constructor(private fb: FormBuilder, private ss: StudentService, private router: Router, public datepipe: DatePipe, private gs: GlobalserviceService) {
+    this.gs.setShowMenu(true);
     this.createForm();
   }
 
@@ -33,7 +35,7 @@ export class ProfileComponent implements OnInit {
 
 
   refresh() {
-    this.router.navigate(['']);
+    this.router.navigate(['home']);
     this.ngOnInit();  
    }
 

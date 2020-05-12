@@ -1,0 +1,66 @@
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <p><b>Sample</b>CRUD</p>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <form [formGroup]="userloginForm" novalidate>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" formControlName="username" #username placeholder="Username">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+          <div *ngIf="userloginForm.controls['username'].invalid && (userloginForm.controls['username'].dirty || userloginForm.controls['username'].touched)" class="alert alert-danger">
+        <div *ngIf="userloginForm.controls['username'].errors.required">
+          Password is required.
+        </div>
+      </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" formControlName="password" #password placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+          <div *ngIf="userloginForm.controls['password'].invalid && (userloginForm.controls['password'].dirty || userloginForm.controls['password'].touched)" class="alert alert-danger">
+        <div *ngIf="userloginForm.controls['password'].errors.required">
+          Password is required.
+        </div>
+      </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" [disabled]="userloginForm.pristine || userloginForm.invalid"  (click) = "onUserLoginSubmit()" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <div *ngIf="invalidLogin" class="error">
+        <div class="alert alert-danger">{{msg}}</div>
+      </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <p class="mb-0">
+        <a href="/regusers" class="text-center">Register a new User</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+</body>

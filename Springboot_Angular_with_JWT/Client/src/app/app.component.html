@@ -1,0 +1,4 @@
+
+<div *ngIf="showmenu; then withMenu else withoutMenu"></div>
+<ng-template #withMenu><app-navigate></app-navigate></ng-template>
+<ng-template #withoutMenu><app-no-navigate></app-no-navigate></ng-template>

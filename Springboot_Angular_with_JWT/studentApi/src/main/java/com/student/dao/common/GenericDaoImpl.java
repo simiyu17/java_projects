@@ -18,7 +18,6 @@ import org.hibernate.Session;
  * @param <T> The persistent type
  * @param <ID> The primary key type
  */
-
 @PersistenceContext(name = "FxCrudPU")
 public class GenericDaoImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
@@ -96,9 +95,6 @@ public class GenericDaoImpl<T, ID extends Serializable> implements GenericDAO<T,
        // return getSession().get(persistentClass, id);
        return em.find(persistentClass, id);
     }
-
-
-
 
     /**
      * Use this inside subclasses as a convenience method.
