@@ -7,7 +7,7 @@ This is a sample servlet CRUD application that runs on tomcat server.
 
 ## Deploy Project
 Change directory to project folder and  run `mvn clean compile package` to create war file.
-Deploy the war file in tomcat application server and go to 'http://127.0.0.1:<port>/<war file name>/home'. Mine is http://127.0.0.1:8083/ServletCrudSample-1.0/home
+Deploy the war file in tomcat application server and go to 'http://127.0.0.1:SERVER_PORT/WAR_FILE_NAME/home'. Mine is http://127.0.0.1:8083/ServletCrudSample-1.0/home
 
 ## What's Included 
 - Create User
