@@ -16,13 +16,13 @@ Deploy the war file in tomcat application server and go to 'http://127.0.0.1:<po
 - Perform CRUD Operations
 
 This is a listing
-[<img src="screen/list.png" alt="Sample list"  />]
+[<img src="screens/list.png" alt="Sample list"  />]
 
 This is a user registration
-[<img src="screen/register.png" alt="Sample registration"  />]
+[<img src="screens/register.png" alt="Sample registration"  />]
 
 This is a login screen
-[<img src="screen/login.png" alt="Sample login"  />]
+[<img src="screens/login.png" alt="Sample login"  />]
 
 
 ## Used Tech
