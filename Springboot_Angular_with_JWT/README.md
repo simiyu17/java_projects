@@ -1,7 +1,7 @@
 # Angular 9 Admin with Spring Boot REST API Authentication By Json Web Token (JWT)
 
 This is a free admin template using Angular 9
-[<img src="screenshot.jpg" alt="Sample Angular authentication using bootstrap template"  />](https://angularadmin.xyz/)
+[<img src="screenshot.jpg" alt="Sample Angular authentication using bootstrap template"  />]
 
 ## Update
 -Make necessary datasource setup in ./studentApi/src/main/resources/application.properties

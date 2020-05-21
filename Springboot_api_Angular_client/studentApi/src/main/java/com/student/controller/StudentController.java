@@ -82,7 +82,7 @@ public class StudentController {
                         HttpStatus.NOT_FOUND);
             }
             studentdao.save(student);
-            return new ResponseEntity<Response>(new Respnse(true, "Successfully Updated Student."), HttpStatus.OK);
+            return new ResponseEntity<Response>(new Response(true, "Successfully Updated Student."), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<Response>(new Response(false, "An Error Occured " + e.getMessage()),
                     HttpStatus.BAD_REQUEST);
