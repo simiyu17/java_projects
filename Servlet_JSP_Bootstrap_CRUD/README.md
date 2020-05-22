@@ -6,7 +6,7 @@ This is a sample servlet CRUD application that runs on tomcat server.
 -Make necessary datasource setup in src/main/resources/META-INF/persistence.xml
 
 ## Deploy Project
-Change directory to project folder and  run `mvn clean compile package` to create war file.
+Change directory to project folder and  run `mvn clean compile package`  or (If you want to skip tests) `mvn clean compile package -Dmaven.test.skip=true`  to create war file.
 Deploy the war file in tomcat application server and go to 'http://127.0.0.1:SERVER_PORT/WAR_FILE_NAME/home'. Mine is http://127.0.0.1:8083/ServletCrudSample-1.0/home
 
 ## What's Included 
@@ -30,6 +30,7 @@ This is a login screen
 - JSP
 - JPA(Hibernate)
 - Mysql
+- JUnit 5
 
 
 ### From Developers

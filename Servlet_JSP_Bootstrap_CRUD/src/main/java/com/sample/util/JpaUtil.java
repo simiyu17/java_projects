@@ -30,7 +30,7 @@ public class JpaUtil {
     public static EntityManagerFactory getEntityManagerFactory() {
         try {
             if (emf == null) {
-                Map properties = new HashMap();
+                Map<Object, Object> properties = new HashMap<Object,Object>();
                 properties.put("connection.pool_size", 1);
                 properties.put("cache.provider_class", "org.hibernate.cache.internal.NoCacheProvider");
                 properties.put("hibernate.hbm2ddl.auto", "update");
