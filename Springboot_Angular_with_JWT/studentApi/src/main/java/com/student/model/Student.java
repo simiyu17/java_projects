@@ -39,6 +39,16 @@ public class Student implements Serializable {
     @Column(name = "dob")
     private String dateOfBirth;
 
+    public Student(){}
+
+    public Student(String name, Gender gender, String dateOfBirth, String city, String country){
+        this.name =name;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.city = city;
+        this.country =country;
+    }
+
     public Long getId() {
         return id;
     }

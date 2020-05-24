@@ -1,5 +1,6 @@
 package com.book.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 import javax.persistence.Basic;
@@ -9,44 +10,52 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="book")
-public class Book implements Serializable{
+@Table(name = "book")
+public class Book implements Serializable {
 
-	 /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    @Basic(optional = false)
-	    private Long id;
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    private Long id;
 
-	@Column(name = "name")
-	    private String title;
-	 
-	 @Column(name = "author")
-	    private String author;
-	 
-	 public Long getId() {
-		return id;
-	}
+    @NotNull
+    @Column(name = "name")
+    private String title;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @NotNull
+    @Column(name = "author")
+    private String author;
+    
+    public Book(){}
+    
+    public Book(String title, String author){
+    this.title =title;
+    this.author = author;
+    }
 
+    public Long getId() {
+        return id;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     /**
      * @return the title

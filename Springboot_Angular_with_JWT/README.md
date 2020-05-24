@@ -15,14 +15,18 @@ Change directory to 'Client' folder and  run `npm start` for a front-end dev ser
 ## What's Included on client side
 - Angular 9 & Typescript
 - Bootstrap 4+ & CSS
-- Responsive layout
-- RTL support
-- High resolution
-- Flexibly configurable themes with hot-reload (3 themes included)
-- Authentication module with multiple providers
-- 20+ Angular Components
+- Spring Boot Backend Api
+- Angular App Api Client
+- Perform CRUD Operations
 
-
+## Used Tech
+- Spring Boot 2.2.6 Api
+- Spring Security
+- Json Web Token (JWT)
+- Angular Client App using a bootstrap template
+- JPA(Hibernate)
+- Mysql
+- JUnit 5
 
 ## Code scaffolding
 

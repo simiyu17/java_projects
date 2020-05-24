@@ -11,8 +11,8 @@ import retrofit2.http.*
 
 interface BookApiClient {
 
-    @GET("books") fun getBooks(): Observable<List<Book>>
-    @POST("books") fun addBook(@Body book: Book): Completable
+    @GET("books/") fun getBooks(): Observable<List<Book>>
+    @POST("books/") fun addBook(@Body book: Book): Completable
     @DELETE("books/{id}") fun deleteBook(@Path("id") id: Long) : Completable
     @PUT("books/{id}") fun updateBook(@Path("id")id: Long, @Body movie: Book) : Completable
 
@@ -23,7 +23,7 @@ interface BookApiClient {
             val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://192.168.43.225:8082/book/api/")
+                .baseUrl("http://192.168.43.225:8082/api/")
                 .build()
 
             return retrofit.create(BookApiClient::class.java)

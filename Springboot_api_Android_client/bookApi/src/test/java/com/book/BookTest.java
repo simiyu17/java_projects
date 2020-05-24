@@ -1,15 +1,20 @@
-package com.student;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.book;
 
-import com.student.model.Gender;
-import com.student.model.Response;
-import com.student.model.Student;
+import com.book.controller.Response;
+import com.book.model.Book;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import org.json.JSONArray;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,22 +22,27 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
-class StudentApiApplicationTests extends AbstractTest {
+/**
+ *
+ * @author simiyu
+ */
+@TestMethodOrder(OrderAnnotation.class)
+public class BookTest extends AbstractTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-    
-    
-    
-    @Test
-    public void testAddStudent() throws Exception {
 
-        Student student = new Student("TESTNAME", Gender.FEMALE, "TESTCITY", "TESTCOUNTRY", "12/12/2019");
-        URI targetUrl = UriComponentsBuilder.fromUriString("/students/").queryParam("student", student).build().encode().toUri();
+  
+
+    @Test
+    public void testAddBook() throws Exception {
+
+        Book book = new Book("TESTTITLE", "TESTAUTHOR");
+        URI targetUrl = UriComponentsBuilder.fromUriString("/books/").queryParam("book", book).build().encode().toUri();
         
          HttpHeaders headers = new HttpHeaders();
         headers.set("X-COM-PERSIST", "true");
-        HttpEntity<Student> request = new HttpEntity<>(student, headers);
+        HttpEntity<Book> request = new HttpEntity<>(book, headers);
         
         ResponseEntity<Response> responseEntity = restTemplate.postForEntity(targetUrl, request, Response.class);
 
@@ -42,14 +52,14 @@ class StudentApiApplicationTests extends AbstractTest {
     }
     
       @Test
-    public void testAddStudentWithNullValues_Should_Return_406() throws Exception {
+    public void testAddBookWithNullValues_Should_Return_406() throws Exception {
 
-        Student student = new Student(null, null, "TESTCITY", "TESTCOUNTRY", "12/12/2019");
-        URI targetUrl = UriComponentsBuilder.fromUriString("/students/").queryParam("student", student).build().encode().toUri();
+        Book book = new Book(null, null);
+        URI targetUrl = UriComponentsBuilder.fromUriString("/books/").queryParam("book", book).build().encode().toUri();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-COM-PERSIST", "true");
-        HttpEntity<Student> request = new HttpEntity<>(student, headers);
+        HttpEntity<Book> request = new HttpEntity<>(book, headers);
 
         ResponseEntity<Response> responseEntity = restTemplate.postForEntity(targetUrl, request, Response.class);
 
@@ -61,15 +71,12 @@ class StudentApiApplicationTests extends AbstractTest {
     
     
     @Test
-    public void testGetAllStudents() throws Exception {
-        URI targetUrl = UriComponentsBuilder.fromUriString("/students/").build().encode().toUri();
+    public void testGetAllBooks() throws Exception {
+        URI targetUrl = UriComponentsBuilder.fromUriString("/books/").build().encode().toUri();
 
         JSONArray responseBodyjson = new JSONArray(restTemplate.getForObject(targetUrl, String.class));
 
-        List<Student> studentlist = Arrays.asList(super.mapFromJson(responseBodyjson.toString(), Student[].class));
-        
-        System.out.println("STUDENTS JSONArray*************************************************"+responseBodyjson.toString());
-        
+        List<Book> booklist = Arrays.asList(super.mapFromJson(responseBodyjson.toString(), Book[].class));
         // Verify request succeed
         Assertions.assertNotNull(responseBodyjson);
        // Assertions.assertTrue(responseBodyjson.toString().contains("title"));
@@ -77,16 +84,16 @@ class StudentApiApplicationTests extends AbstractTest {
 
     @Test
     public void testRemoveTestData() throws Exception {
-        URI targetUrl = UriComponentsBuilder.fromUriString("/students/").build().encode().toUri();
+        URI targetUrl = UriComponentsBuilder.fromUriString("/books/").build().encode().toUri();
         JSONArray responseBodyjson = new JSONArray(restTemplate.getForObject(targetUrl, String.class));
 
-        Student[] studentarray = super.mapFromJson(responseBodyjson.toString(), Student[].class);
-        for (Student b : studentarray) {
-            if (b.getName().equals("TESTNAME")) {
-                URI deleteUrl = UriComponentsBuilder.fromUriString("/students/" + b.getId()).build().encode().toUri();
+        Book[] bookarray = super.mapFromJson(responseBodyjson.toString(), Book[].class);
+        for (Book b : bookarray) {
+            if (b.getTitle().equals("TESTTITLE")) {
+                URI deleteUrl = UriComponentsBuilder.fromUriString("/books/" + b.getId()).build().encode().toUri();
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("X-COM-PERSIST", "true");
-                HttpEntity<Student> request = new HttpEntity<>(null, headers);
+                HttpEntity<Book> request = new HttpEntity<>(null, headers);
 
                 ResponseEntity<Response> responseEntity = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, request, Response.class);
                 Assertions.assertNotNull(responseEntity.getBody().getSuccess());
@@ -94,10 +101,11 @@ class StudentApiApplicationTests extends AbstractTest {
 
             }
         }
+        //List<Book> booklist = Arrays.asList(bookarray);
+
+        // Verify request succeed
         Assertions.assertNotNull(responseBodyjson);
         //Assertions.assertTrue(responseBodyjson.toString().contains("title"));
     }
-
-
 
 }

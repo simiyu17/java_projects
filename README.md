@@ -1,2 +1,3 @@
-# java_projects
-My sample java projects
+# JAVA SAMPLE APPLICATIONS
+
+Browse through. Each application contains a readme.

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,12 +53,12 @@ public class StudentController {
     // -------------------Create a Student-------------------------------------------
    
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createStudent(@RequestBody Student student, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> createStudent(@RequestBody Student student) {
         try {
             studentdao.save(student);
         return new ResponseEntity<Response>(new Response(true, "Successfully Created Student !!", null, null), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
@@ -77,7 +76,7 @@ public class StudentController {
         studentdao.save(student);
         return new ResponseEntity<Response>(new Response(true, "Successfully Updated Student.", null, null), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -93,7 +92,7 @@ public class StudentController {
         studentdao.delete(student);
         return new ResponseEntity<Response>(new Response(true, "Successfully Removed Student.", null, null), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured "+e.getMessage(), null, null), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }

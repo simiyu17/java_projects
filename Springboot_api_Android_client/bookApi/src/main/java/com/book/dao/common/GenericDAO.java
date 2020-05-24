@@ -37,8 +37,8 @@ public interface GenericDAO<T, ID extends Serializable> {
      * @param entity the entity to save
      *
      * @return the saved entity
-     */
-    void saveEntity(final T entity) throws Exception;
+     */    
+     T saveEntity(final T entity) throws Exception;
 
 
     /**

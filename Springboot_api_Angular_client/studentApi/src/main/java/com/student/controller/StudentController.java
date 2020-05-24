@@ -65,7 +65,7 @@ public class StudentController {
                     HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<Response>(new Response(false, "An Error Occured " + e.getMessage()),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_ACCEPTABLE);
         }
 
     }

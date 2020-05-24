@@ -14,9 +14,8 @@ import javax.persistence.criteria.Root;
 public class BookDaoImpl extends GenericDaoImpl<Book, Long> implements BookDao {
 
     @Override
-    public void save(Book book) throws Exception {
-        saveEntity(book);
-
+    public Book save(Book book) throws Exception {
+        return saveEntity(book);
     }
 
     @Override

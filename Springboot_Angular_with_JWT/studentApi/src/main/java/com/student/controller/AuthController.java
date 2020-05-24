@@ -84,7 +84,7 @@ public class AuthController {
       }
   
   
-      @GetMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+      @GetMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
       @ResponseBody
       public List<UserInfo> listAllUsers() {
           List<UserInfo> users = userdao.getUsers(null);
@@ -105,10 +105,10 @@ public class AuthController {
       // -------------------Create a User-------------------------------------------
 
       @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-      public ResponseEntity<?> createUser(@RequestBody UserInfo user, UriComponentsBuilder ucBuilder) {
+      public ResponseEntity<?> createUser(@RequestBody UserInfo user) {
           try {
             if (userdao.findByUsername(user.getUsername()) != null) {
-                return new ResponseEntity<Response>(new Response(false, "Username "+user.getUsername()+" already exists.", null, null), HttpStatus.OK);
+                return new ResponseEntity<Response>(new Response(false, "Username "+user.getUsername()+" already exists.", null, null), HttpStatus.CONFLICT);
               }
               userdao.save(user);
               return new ResponseEntity<Response>(new Response(true, "Successfully Created User.", null, null), HttpStatus.CREATED);

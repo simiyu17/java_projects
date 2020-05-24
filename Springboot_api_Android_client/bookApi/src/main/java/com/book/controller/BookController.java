@@ -3,7 +3,6 @@ package com.book.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.book.dao.bookcrud.BookDaoImpl;
 import com.book.model.Book;
@@ -23,78 +21,73 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/books")
 public class BookController {
-
 
     @Autowired
     private BookDaoImpl bookdao;
 
     // -------------------Retrieve All Books---------------------------------------------
-
-    @GetMapping(value = "/books", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @GetMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<Book> listAllBooks() {
-          List<Book> books = bookdao.getBooks();
+        List<Book> books = bookdao.getBooks();
         return books;
     }
 
     // -------------------Retrieve Single Book------------------------------------------
-    @SuppressWarnings("unchecked")
     @CrossOrigin
-    @GetMapping(value = "/books/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<?> getBook(@PathVariable("id") Long id) {
         Book book = bookdao.findById(id);
         if (book == null) {
-            return new ResponseEntity(new CustomErrorType("Book with id " + id
-                    + " not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Response>(new Response(false, "Book with id " + id + " not found.", null, null), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Book>(book, HttpStatus.OK);
     }
 
     // -------------------Create a Book-------------------------------------------
     @CrossOrigin
-    @PostMapping(value = "/books", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBook(@RequestBody Book book, UriComponentsBuilder ucBuilder) throws Exception {
-
-        bookdao.save(book);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/books/{id}").buildAndExpand(book.getId()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createBook(@RequestBody Book book) {
+        try {
+            bookdao.save(book);
+            return new ResponseEntity<Response>(new Response(true, "Successfully Created Book.", null, null), HttpStatus.CREATED);
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + ex.getMessage(), null, null), HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     // ------------------- Update a Book ------------------------------------------------
     @CrossOrigin
-    @PutMapping(value = "/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody Book book) throws Exception {
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody Book book) {
+        try {
+            if (bookdao.findById(id) == null) {
+                return new ResponseEntity<Response>(new Response(false, "Book with id " + id + " not found.", null, null), HttpStatus.NOT_FOUND);
+            }
 
-        Book currentBook = bookdao.findById(id);
-
-        if (currentBook == null) {
-            return new ResponseEntity<Book>(HttpStatus.NOT_FOUND);
+            book.setId(id);
+            bookdao.save(book);
+            return new ResponseEntity<Response>(new Response(true, "Successfully Updated Book.", null, null), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + ex.getMessage(), null, null), HttpStatus.OK);
         }
-
-        currentBook.setTitle(book.getTitle());
-        currentBook.setAuthor(book.getAuthor());
-
-        bookdao.save(currentBook);
-        return new ResponseEntity<Book>(currentBook, HttpStatus.OK);
     }
 
     // ------------------- Delete a Book-----------------------------------------
-    @SuppressWarnings("unchecked")
     @CrossOrigin
-    @DeleteMapping(value = "/books/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id) throws Exception {
-
-        Book book = bookdao.findById(id);
-        if (book == null) {
-            return new ResponseEntity(new CustomErrorType("Unable to delete. Book with id " + id + " not found."),
-                    HttpStatus.NOT_FOUND);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id) {
+        try {
+            if (bookdao.findById(id) == null) {
+                return new ResponseEntity<Response>(new Response(false, "Book with id " + id + " not found.", null, null), HttpStatus.NOT_FOUND);
+            }
+            bookdao.delete(bookdao.findById(id));
+            return new ResponseEntity<Response>(new Response(true, "Successfully Updated Book.", null, null), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response(false, "An Error Occured " + ex.getMessage(), null, null), HttpStatus.OK);
         }
-        bookdao.delete(book);
-        return new ResponseEntity<Book>(HttpStatus.NO_CONTENT);
     }
 
 }

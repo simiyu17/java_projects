@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,19 +20,25 @@ import org.hibernate.Session;
  * @param <T> The persistent type
  * @param <ID> The primary key type
  */
-@SuppressWarnings("deprecation")
-@PersistenceContext(name = "FxCrudPU")
+
 public abstract class GenericDaoImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
     private final Class<T> persistentClass;
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
+    
 
     protected Session getSession() {
         Session session = em.unwrap(Session.class);
         return session;
     }
+    
+    protected EntityManager getEntityManager() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("primaryPU");;
+        return emf.createEntityManager();
+    }
+    
 
     @SuppressWarnings("unchecked")
     public GenericDaoImpl() {
@@ -55,11 +63,10 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
     /**
      * @see GenericDAO#save(Object) #save(java.lang.Object)
      */
-    @Override
-    public void saveEntity(T entity) throws Exception {
-       // getSession().beginTransaction();
-        em.merge(entity);
-        //getSession().getTransaction().commit();
+    
+     @Override
+    public T saveEntity(T entity) throws Exception {
+        return em.merge(entity);
     }
 
     /**
@@ -67,9 +74,7 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
      */
     @Override
     public void deleteEntity(T entity) throws Exception {
-      //  getSession().beginTransaction();
         em.remove(entity);
-        //getSession().getTransaction().commit();
     }
 
     /**
@@ -79,9 +84,7 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
     public void deleteEntityById(final ID id) throws Exception {
         T entity = this.findEntityById(id);
         if (entity != null) {
-            //getSession().beginTransaction();
             em.remove(entity);
-           // getSession().getTransaction().commit();
         }
     }
 
@@ -91,9 +94,6 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
      */
     @Override
     public T findEntityById(final ID id) {
-        //getSession().beginTransaction();
-
-       // return getSession().get(persistentClass, id);
        return em.find(persistentClass, id);
     }
 
