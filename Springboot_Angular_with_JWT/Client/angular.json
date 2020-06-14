@@ -28,7 +28,6 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              
               "src/assets/added_css_js/fontawesome-free/css/all.min.css",
               "src/assets/added_css_js/dist/css/adminlte.min.css"
             ],
@@ -36,7 +35,6 @@
               "node_modules/jquery/dist/jquery.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
               "node_modules/bootstrap/dist/js/bootstrap.js",
-
               "src/assets/added_css_js/dist/js/adminlte.min.js"
             ]
           },
@@ -133,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "Client"
+  "defaultProject": "Client",
+  "cli": {
+    "analytics": "b298b2b5-1bb2-4bb6-949f-0a2c1a1c60ea"
+  }
 }
