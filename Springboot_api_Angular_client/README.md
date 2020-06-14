@@ -10,7 +10,7 @@ This is a free admin template using Angular 9
 Change directory to 'studentApi' folder and  run `mvn compile package && java -jar target/studentApi-1.jar` to start the spring boot
 
 ## Client Side
-Change directory to 'Client' folder and  run `npm start` for a front-end dev server. Navigate to `http://localhost:4200/`.
+Change directory to 'Client' folder and  run `npm install && npm start` for a front-end dev server. Navigate to `http://localhost:4200/`.
 
 ## What's Included on client side
 - Angular 9 & Typescript

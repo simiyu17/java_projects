@@ -1,0 +1,95 @@
+version: "3"
+services: 
+    eureka-server:
+        hostname: eureka-server
+        build: 
+            context: discoveryServer
+            dockerfile: Dockerfile
+        image: studenteurekaserver
+        ports: 
+            - "8761:8761"
+        container_name: eureka-server
+        restart: on-failure
+        networks: 
+            - student-network
+        depends_on: 
+            - activemq-server
+            - mysql-server
+    zuul-apigateway-server:
+        build: 
+            context: zuulApiGateway
+            dockerfile: Dockerfile
+        image: studentapigateway
+        ports: 
+            - "8762:8762"
+        container_name: zuul-apigateway-server
+        restart: on-failure
+        networks: 
+            - student-network
+        depends_on: 
+            - eureka-server
+    student-service:
+        build: 
+            context: studentService
+            dockerfile: Dockerfile
+        image: studentservice
+        ports: 
+            - "8082:8082"
+        container_name: student-service
+        restart: on-failure
+        networks: 
+            - student-network
+        depends_on: 
+            - eureka-server
+    fees-service:
+        build: 
+            context: feesService
+            dockerfile: Dockerfile
+        image: feeservice
+        ports: 
+            - "8084:8084"
+        container_name: fees-service
+        restart: on-failure
+        networks: 
+            - student-network
+        depends_on:
+            - eureka-server
+    exams-service:
+        build: 
+            context: examsService
+            dockerfile: Dockerfile
+        image: examservive
+        ports: 
+            - "8083:8083"
+        container_name: exams-service
+        restart: on-failure
+        networks: 
+            - student-network
+        depends_on:
+            - eureka-server
+    mysql-server:
+        image: mysql:latest
+        restart: always
+        container_name: mysql-server
+        environment: 
+            MYSQL_ROOT_PASSWORD: rootpw
+            MYSQL_ROOT_HOST: '%'
+        ports: 
+            - "3306:3306"
+        volumes: 
+            - "mysql_db_data_container:/var/lib/mysql"
+        networks: 
+            - student-network
+    activemq-server:
+        image: webcenter/activemq:latest
+        container_name: activemq-server
+        ports:
+            - "61616:61616"
+            - "8161:8161"
+        networks: 
+            - student-network
+volumes: 
+    mysql_db_data_container:
+networks: 
+    student-network:
+        driver: bridge                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
