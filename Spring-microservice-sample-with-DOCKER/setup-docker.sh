@@ -1,13 +1,10 @@
 #!/bin/bash
 
 #Package the services
-mvn clean install
+mvn clean install -DskipTests=true
 
 #Stop docker container if they are up
 docker-compose down
 
-#Build images using docker compose
-docker-compose build
-
-#Start image instances (containers)
-docker-compose up
+#Build images and Start image instances (containers)
+docker-compose up --build --force-recreate 

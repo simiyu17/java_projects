@@ -65,7 +65,7 @@ public class ExaminationController {
                 return new ResponseEntity<Response>(new Response(false, "No student with id:"+exam.getStudentId()+" Found"), HttpStatus.NOT_FOUND);
             }
             if (std.getFeeStatus() != FeeStatus.FULLY_PAID) {
-                return new ResponseEntity<Response>(new Response(false, "Student HAS NOT FULLY PAID fees as required"), HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<Response>(new Response(false, "Student HAS NOT HAVE FULLY PAID fees (1000 units) as required"), HttpStatus.NOT_ACCEPTABLE);
             }
             
             studentdao.save(exam);
