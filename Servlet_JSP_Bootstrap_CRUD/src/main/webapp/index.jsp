@@ -117,23 +117,6 @@
         $('#student_form').modal('show');
     }
 
-    function edit_studccccent(id)
-    {
-        //start_wait();
-        $.ajax({
-            url: $('#base_url').val() + 'students',
-            type: 'GET',
-            data: {ACTION: 'GET_STUDENT', student_id: id},
-            dataType: 'json',
-            success: function (json) {
-                // $('#student-form-content').html(html);
-                //$('#modal-student-form').modal('show');
-                //stop_wait();
-                console.log('JSON**********' + json)
-            }
-        });
-    }
-
     function edit_student(id)
     {
         start_wait();
@@ -148,7 +131,7 @@
                 $('#student_id').val(std.id);
                 $('#name').val(std.name);
                 $('#gender').val(std.gender);
-                $('#dateOfBirth').val(std.dateOfBirth);
+                $('#subject').val(std.favouriteSubject);
                 $('#city').val(std.city);
                 $('#country').val(std.country);
 

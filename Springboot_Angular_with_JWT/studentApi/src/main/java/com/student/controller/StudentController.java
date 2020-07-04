@@ -1,5 +1,6 @@
 package com.student.controller;
 
+import com.student.config.CommonUtil;
 import com.student.dao.student.StudentDaoImpl;
 import com.student.model.Response;
 import com.student.model.Student;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestController
 @RequestMapping("/students")
 @CrossOrigin
-public class StudentController {
+public class StudentController extends CommonUtil{
     
     @Autowired
     private StudentDaoImpl studentdao;
