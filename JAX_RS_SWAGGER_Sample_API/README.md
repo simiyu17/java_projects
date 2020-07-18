@@ -24,7 +24,7 @@ This is Swagger Json
 [<img src="screens/swagger-json.png" alt="Sample Swagger Json"  />]
 
 This is an Example
-[<img src="screens/login.png" alt="Sample login"  />]
+[<img src="screens/example.png" alt="Sample api"  />]
 
 
 ## Used Tech
