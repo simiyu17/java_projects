@@ -68,7 +68,7 @@ public class AuthController {
   
           authenticationManager.authenticate(usernamePasswordAuthenticationToken);
   
-          if (!usernamePasswordAuthenticationToken.isAuthenticated()) { 
+          if (!usernamePasswordAuthenticationToken.isAuthenticated()) {
               return new ResponseEntity<Response>(new Response(false, "Invalid username and/or password.", null, null), HttpStatus.OK);
           }
           SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

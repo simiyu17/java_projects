@@ -1,0 +1,31 @@
+spring:
+   cloud:
+      stream:
+         default-binder: kafka
+         kafka:
+            binder:
+               brokers:
+               - kafka-server:9092
+         bindings:
+            input:
+               binder: kafka
+               destination: deleteStdRecsTopic
+               content-type: text/plain
+               group: student-score-group
+   application:
+      name: exams-service
+   datasource:
+      url: jdbc:mysql://mysql-server:3306/school_exams?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: rootpw
+      driver-class-name: com.mysql.cj.jdbc.Driver
+   jpa:
+      show-sql: true
+      hibernate:
+         ddl-auto: update
+server:
+   port: 8083
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://eureka-server:8761/eureka/

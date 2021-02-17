@@ -1,0 +1,57 @@
+
+@studenturl = http://127.0.0.1:8762/api/students/students/ 
+@feesurl = http://127.0.0.1:8762/api/fees/fees
+@examsurl = http://127.0.0.1:8762/api/exams/scores
+
+
+### Create Student
+
+POST {{studenturl}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Daniel Simiyu",
+    "gender": "MALE",
+    "city": "Nairobi",
+    "country": "Kenya",
+    "dateOfBirth": "2020-06-04"
+}
+
+### Get Single Student
+GET {{studenturl}}2 HTTP/1.1
+
+### Get All Students
+GET {{studenturl}} HTTP/1.1
+
+### Delete Student
+DELETE {{studenturl}}2 HTTP/1.1
+
+
+### Create Student Fees Payment Record for student with Id = 1
+POST {{feesurl}}/  HTTP/1.1
+Content-Type: application/json
+
+{
+    "amount": 400,
+    "datePaid": "2020-06-05",
+    "studentId": 2
+}
+
+### Get Student Fees Records
+GET {{feesurl}}?studentId=2 HTTP/1.1
+Content-Type: application/json
+
+### Create Student Exam Record for student with Id = 1
+POST {{examsurl}}/  HTTP/1.1
+Content-Type: application/json
+    
+{
+    "studentId": 2,
+    "subject": "MATHS",
+    "score": 70,
+    "year" : "2020"
+}
+
+### Get Student Exam Records
+GET {{examsurl}}?studentId=2 HTTP/1.1
+Content-Type: application/json

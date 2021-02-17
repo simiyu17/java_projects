@@ -68,7 +68,7 @@ services:
         depends_on:
             - eureka-server
     mysql-server:
-        image: mysql:latest
+        image: mysql/mysql-server:8.0
         restart: always
         container_name: mysql-server
         environment: 
