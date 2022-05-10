@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  sample-redis:
+    container_name: sample-redis
+    build: .
+    restart: on-failure
+    env_file: ./.env
+    networks:
+      - sample-redis-net
+    depends_on:
+      - mysql-db
+      - redis-cache
+    ports:
+      - $APP_LOCAL_PORT:$APP_DOCKER_PORT
+  mysql-db:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql-db
+    env_file: ./.env
+    environment: 
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports: 
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    networks: 
+      - sample-redis-net
+  redis-cache:
+    container_name: redis-cache
+    image: redis:5.0.3-alpine
+    env_file: ./.env
+    ports:
+      - $REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+    networks: 
+      - sample-redis-net
+networks:
+  sample-redis-net:
+    driver: bridge
+
