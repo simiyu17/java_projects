@@ -60,17 +60,13 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
         this.persistentClass = persistentClass;
     }
 
-    /**
-     * @see GenericDAO#getEntityClass()
-     */
+
     @Override
     public Class<T> getEntityClass() {
         return persistentClass;
     }
 
-    /**
-     * @see GenericDAO#save(Object) #save(java.lang.Object)
-     */
+
     @Override
     public void saveEntity(T entity) throws Exception {
         getSession().beginTransaction();
@@ -78,9 +74,6 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
         getSession().getTransaction().commit();
     }
 
-    /**
-     * @see GenericDAO#delete(java.lang.Object)
-     */
     @Override
     public void deleteEntity(T entity) throws Exception {
         if (getSession().getTransaction() == null) {
@@ -90,9 +83,6 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
         getSession().getTransaction().commit();
     }
 
-    /**
-     * @see GenericDAO#deleteById(java.lang.Object)
-     */
     @Override
     public void deleteEntityById(final ID id) throws Exception {
         T entity = this.findEntityById(id);
@@ -106,9 +96,6 @@ public abstract class GenericDaoImpl<T, ID extends Serializable> implements Gene
     }
 
 
-    /**
-     * @see GenericDAO#findById(java.io.Serializable)
-     */
     @Override
     public T findEntityById(final ID id) {
         getSession().beginTransaction();

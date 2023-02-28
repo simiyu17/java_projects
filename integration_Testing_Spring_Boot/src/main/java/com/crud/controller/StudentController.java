@@ -34,8 +34,7 @@ public class StudentController {
     @GetMapping(value = "/", produces = { MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<Student> listAllStudents() {
-          List<Student> students = studentdao.getStudents();
-        return students;
+        return studentdao.getStudents();
     }
 
     // -------------------Retrieve Single Student------------------------------------------
