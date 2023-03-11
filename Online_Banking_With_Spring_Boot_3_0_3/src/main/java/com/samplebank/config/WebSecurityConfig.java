@@ -5,8 +5,8 @@
 package com.samplebank.config;
 
 import com.samplebank.security.JWTAuthenticationFilter;
-import com.samplebank.service.UserService;
-import com.samplebank.service.UserServiceImpl;
+import com.samplebank.security.JWTAuthorizationFilter;
+import com.samplebank.security.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  *
@@ -34,23 +36,21 @@ public class WebSecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
     private final UserServiceImpl userService;
+    private final AuthenticationManager aunthenticationManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(new AuthenticationConfiguration())))
+                .addFilterBefore(new JWTAuthenticationFilter(aunthenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthorizationFilter(aunthenticationManager), BasicAuthenticationFilter.class)
                 .userDetailsService(userService)
                 .logout()
                 .logoutUrl("/api/v1/auth/logout")

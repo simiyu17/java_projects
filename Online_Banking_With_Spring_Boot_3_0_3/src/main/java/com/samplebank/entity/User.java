@@ -8,12 +8,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user")
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable{
 
      @Id
@@ -29,8 +34,12 @@ public class User implements Serializable{
     
     @OneToOne(mappedBy = "user")
     private Client client;
+    
+    @Transient
+    private String userFullName;
 
-    private User() {
+    public String getUserFullNameFromClient(){
+        return String.format("%s %s", this.client.getFirstName(), this.client.getLastName());
     }
     
     

@@ -14,10 +14,10 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class JwtRequest implements Serializable {
+public class ApiResponse implements Serializable{
+    
+    private final boolean success;
 
-    private final String username;
-    private final String password;
-
+    private final String msg;
     
 }

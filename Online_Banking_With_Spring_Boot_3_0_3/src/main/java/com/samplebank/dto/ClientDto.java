@@ -4,20 +4,10 @@
  */
 package com.samplebank.dto;
 
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  *
  * @author simiyu
  */
-@Getter
-@AllArgsConstructor
-public class JwtRequest implements Serializable {
-
-    private final String username;
-    private final String password;
-
+public class ClientDto {
     
 }
