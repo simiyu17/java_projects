@@ -1,5 +1,10 @@
 package com.samplebank.repository;
 
-public interface ClientRepository {
+import com.samplebank.entity.Client;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ClientRepository extends JpaRepository<Client, Long>{
 
 }

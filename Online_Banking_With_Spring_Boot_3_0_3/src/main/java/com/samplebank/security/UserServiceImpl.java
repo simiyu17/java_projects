@@ -6,6 +6,8 @@ package com.samplebank.security;
 
 import com.samplebank.dto.JwtRequest;
 import com.samplebank.dto.LoginResponse;
+import com.samplebank.dto.UserDto;
+import com.samplebank.entity.Client;
 import com.samplebank.entity.User;
 import com.samplebank.exceptions.UserNotFoundException;
 import com.samplebank.repository.UserRepository;
@@ -24,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,10 +39,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder PasswordEncoder;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public User createUser(UserDto userDto, Client client) {
+        return userRepository.save(User.createUser(userDto, client, PasswordEncoder));
     }
 
     @Override

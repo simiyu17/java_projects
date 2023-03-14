@@ -4,10 +4,52 @@
  */
 package com.samplebank.dto;
 
+import com.samplebank.entity.Client;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.time.LocalDate;
+import lombok.Getter;
+
 /**
  *
  * @author simiyu
  */
-public class ClientDto {
+@Getter
+public class ClientDto implements Serializable{
+    
+    private Long id;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String joinedDate;
+
+    private String activationDate;
+
+    private String closedDate;
+
+    private String gender;
+
+    private String clientStatus;
+
+    private String clientGovernmentId;
+
+    private String cellPhone;
+
+    private String emailAddress;
+
+    public ClientDto(String firstName, String lastName, String gender, String clientGovernmentId, String cellPhone, String emailAddress) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.clientGovernmentId = clientGovernmentId;
+        this.cellPhone = cellPhone;
+        this.emailAddress = emailAddress;
+    }
+    
     
 }

@@ -6,6 +6,8 @@ package com.samplebank.security;
 
 import com.samplebank.dto.JwtRequest;
 import com.samplebank.dto.LoginResponse;
+import com.samplebank.dto.UserDto;
+import com.samplebank.entity.Client;
 import com.samplebank.entity.User;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public interface UserService {
     
-    User createUser(User user);
+    User createUser(UserDto userDto, Client client);
     
     User findUserById(Long id);
     
