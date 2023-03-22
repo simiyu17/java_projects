@@ -7,6 +7,7 @@ package com.samplebank.config;
 import com.samplebank.security.JWTAuthenticationFilter;
 import com.samplebank.security.JWTAuthorizationFilter;
 import com.samplebank.security.UserServiceImpl;
+import com.samplebank.utilities.GeneralConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +32,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class WebSecurityFilterChainConfig {
 
     private final AuthenticationProvider authenticationProvider;
-    private final LogoutHandler logoutHandler;
-    private final UserServiceImpl userService;
-    private final AuthenticationManager aunthenticationManager;
+    private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,31 +43,23 @@ public class WebSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.requestMatchers("/auth/**").permitAll();
+                    auth.requestMatchers(GeneralConstants.CLIENT_ENDPOINT+"**").hasRole("CLIENT");
+                    auth.requestMatchers(GeneralConstants.ADMIN_ENDPOINT+"**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(new JWTAuthenticationFilter(aunthenticationManager), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTAuthorizationFilter(aunthenticationManager), BasicAuthenticationFilter.class)
-                .userDetailsService(userService)
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutUrl("/api/v1/auth/logout")
-                .addLogoutHandler(logoutHandler)
+                .logoutUrl("/auth/logout")
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+
+
 
 }

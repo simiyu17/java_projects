@@ -4,20 +4,12 @@
  */
 package com.samplebank.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
- *
  * @author simiyu
  */
-@Getter
-@AllArgsConstructor
-public class JwtRequest implements Serializable {
+public record JwtRequest(@NotBlank String username, @NotBlank String password) implements Serializable {
 
-    private final String username;
-    private final String password;
-
-    
 }

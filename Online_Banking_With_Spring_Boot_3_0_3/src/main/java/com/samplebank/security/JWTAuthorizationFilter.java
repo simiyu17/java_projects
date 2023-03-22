@@ -2,9 +2,14 @@ package com.samplebank.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import java.util.List;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import jakarta.servlet.FilterChain;
@@ -13,47 +18,44 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+@Component
+@RequiredArgsConstructor
+public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
-        super(authManager);
-    }
+    private final CurrentUserDetails currentUserDetails;
+
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String header = req.getHeader(SecurityConstants.HEADER_STRING);
+        final var header = request.getHeader(SecurityConstants.HEADER_AUTHORIZATION);
 
         if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            chain.doFilter(req, res);
+            chain.doFilter(request, response);
+            return;
+        }
+        final var token = header.replaceFirst(SecurityConstants.TOKEN_PREFIX, "").trim();
+
+        UserDetails userDetails = currentUserDetails
+                .loadUserByUsername(JwtTokenUtil.extractUsername(token));
+
+        if (!JwtTokenUtil.isTokenValid(token, userDetails)) {
+            chain.doFilter(request, response);
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+
+            authentication.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+            );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        chain.doFilter(req, res);
-    }
-
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.HEADER_STRING);
-        if (token != null) {
-            // parse the token.
-            String user = null;
-            try {
-                user = Jwts.parser().setSigningKey(SecurityConstants.SECRET.getBytes())
-                        .parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, "")).getBody().getSubject();
-            } catch (ExpiredJwtException e) {
-                request.setAttribute("expired", e.getMessage());
-            }
-
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
-            return null;
-        }
-        return null;
+        chain.doFilter(request, response);
     }
 }

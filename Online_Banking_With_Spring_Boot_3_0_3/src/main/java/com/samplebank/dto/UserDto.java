@@ -16,9 +16,9 @@ public class UserDto implements Serializable{
     
     private Long id;
 
-    private String username;
+    private final String username;
 
-    private String password;
+    private final String password;
 
     public UserDto(String username, String password) {
         this.username = username;

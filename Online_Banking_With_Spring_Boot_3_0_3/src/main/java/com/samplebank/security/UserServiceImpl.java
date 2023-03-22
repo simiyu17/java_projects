@@ -11,23 +11,20 @@ import com.samplebank.entity.Client;
 import com.samplebank.entity.User;
 import com.samplebank.exceptions.UserNotFoundException;
 import com.samplebank.repository.UserRepository;
+import com.samplebank.utilities.GeneralConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 /**
  *
@@ -35,12 +32,16 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+@Validated
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder PasswordEncoder;
+    private final CurrentUserDetails currentUserDetails;
 
+    @Transactional
     @Override
     public User createUser(UserDto userDto, Client client) {
         return userRepository.save(User.createUser(userDto, client, PasswordEncoder));
@@ -58,51 +59,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User findUserByUserName(String userName) {
-        return userRepository.findByUserName(userName).orElseThrow(() -> new UserNotFoundException("User Not Found By User Name"));
+        return userRepository.findByUsername(userName).orElseThrow(() -> new UserNotFoundException("User Not Found By User Name"));
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username).orElse(null);
-        
-        if(Objects.isNull(user)){
-            return null;
-        }
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
-    }
+
 
     @Override
     public LoginResponse authenticateUser(JwtRequest request) {
-        if (request.getUsername().isEmpty() || request.getPassword().isEmpty()) {
-              return new LoginResponse(false, "Missing username and/or password.", null);
+        if (request.username().isEmpty() || request.password().isEmpty()) {
+            throw  new UserNotFoundException("Missing username and/or password.");
           }
           
-          UserDetails userDetails = loadUserByUsername(request.getUsername());
+          UserDetails userDetails = currentUserDetails.loadUserByUsername(request.username());
           if (Objects.isNull(userDetails)) {
-              return new LoginResponse(false, "Invalid username and/or password.", null);
+              createDefaultAdminUser();
+              throw  new UserNotFoundException("Invalid username and/or password.");
           }
           
-          var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, request.getPassword(), new ArrayList<>());
+          var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, request.password(), userDetails.getAuthorities());
   
           authenticationManager.authenticate(usernamePasswordAuthenticationToken);
   
           if (!usernamePasswordAuthenticationToken.isAuthenticated()) {
-              return new LoginResponse(false, "Invalid username and/or password.", null);
+              throw  new UserNotFoundException("Invalid username and/or password.");
           }
           SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
           
           var user = findUserByUserName(userDetails.getUsername());
-  
-          var token = Jwts.builder()
-                  .setSubject(((org.springframework.security.core.userdetails.User) usernamePasswordAuthenticationToken.getPrincipal()).getUsername())
-                  .claim("user_id", user.getId())
-                  .claim("user_full_name", user.getUserFullNameFromClient())
-                  .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                  .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes())
-                  .compact();
-          
-          return new LoginResponse(true, "Login Was Successful", token);
+
+          return new LoginResponse(true, "Login Was Successful", JwtTokenUtil.createToken(user));
+    }
+
+
+    private void createDefaultAdminUser(){
+        if (this.userRepository.findAll().isEmpty()) {
+            UserDto userDto = new UserDto(GeneralConstants.DEFAULT_ADMIN_USER_NAME, GeneralConstants.DEFAULT_ADMIN_PASSWORD);
+            this.createUser(userDto, null);
+        }
     }
     
 }

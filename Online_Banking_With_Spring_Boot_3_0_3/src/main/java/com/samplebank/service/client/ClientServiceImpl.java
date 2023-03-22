@@ -1,4 +1,4 @@
-package com.samplebank.service;
+package com.samplebank.service.client;
 
 import com.samplebank.dto.ClientDto;
 import com.samplebank.dto.UserDto;

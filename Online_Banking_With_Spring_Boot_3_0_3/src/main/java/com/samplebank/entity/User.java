@@ -1,6 +1,7 @@
 package com.samplebank.entity;
 
 import com.samplebank.dto.UserDto;
+import com.samplebank.utilities.GeneralConstants;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +17,12 @@ import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@Table(name = "user")
-@Getter
-public class User implements Serializable{
+@Table(name = "users")
+@Getter @NoArgsConstructor public class User implements Serializable{
 
      @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,9 +39,8 @@ public class User implements Serializable{
     @JoinColumn(name = "client_id")
     private Client client;
     
-    @Column(name = "user_type")
-    @Enumerated(EnumType.STRING)
-    private UserType UserType;
+    @Column(name = "user_role")
+    private String role;
     
     @Transient
     private String userFullName;
@@ -49,20 +49,19 @@ public class User implements Serializable{
         this.username = username;
         this.password = password;
         this.client = client;
-        this.UserType = Objects.nonNull(this.client) ? UserType.CLIENT_USER : UserType.ADMIN_USER;
+        this.role = Objects.nonNull(this.client) ? GeneralConstants.ROLE_CLIENT : GeneralConstants.ROLE_ADMIN;
     }
     
     
     
 
     public String getUserFullNameFromClient(){
+        if (Objects.isNull(this.client)){
+            return this.username;
+        }
         return String.format("%s %s", this.client.getFirstName(), this.client.getLastName());
     }
-    
-    private enum UserType{
-        CLIENT_USER, ADMIN_USER;
-    }
-    
+
     public static User createUser(UserDto userDto, Client client, PasswordEncoder encoder){
         return new User(userDto.getUsername(), encoder.encode(userDto.getPassword()), client);
     }

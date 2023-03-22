@@ -9,17 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- *
  * @author simiyu
  */
-@Getter
-@AllArgsConstructor
-public class LoginResponse implements Serializable {
-    
-    private final boolean success;
+public record LoginResponse(boolean success, String msg, String authToken) implements Serializable {
 
-    private final String msg;
-    
-    private final String authToken;
-        
 }

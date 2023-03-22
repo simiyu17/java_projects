@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Entity
-@Table(name = "client")
+@Table(name = "clients")
 @Getter
 @AllArgsConstructor
 public class Client implements Serializable {
