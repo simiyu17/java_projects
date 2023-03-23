@@ -1,6 +1,7 @@
 package com.samplebank.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.util.List;
 import java.util.Objects;
@@ -39,10 +40,16 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
         final var token = header.replaceFirst(SecurityConstants.TOKEN_PREFIX, "").trim();
 
-        UserDetails userDetails = currentUserDetails
-                .loadUserByUsername(JwtTokenUtil.extractUsername(token));
+        UserDetails userDetails = null;
 
-        if (!JwtTokenUtil.isTokenValid(token, userDetails)) {
+        try {
+            userDetails = currentUserDetails
+                    .loadUserByUsername(JwtTokenUtil.extractUsername(token));
+        }catch (JwtException ignored){
+
+        }
+
+        if (Objects.isNull(userDetails) || !JwtTokenUtil.isTokenValid(token, userDetails)) {
             chain.doFilter(request, response);
             return;
         }

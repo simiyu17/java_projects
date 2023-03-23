@@ -15,6 +15,7 @@ import com.samplebank.utilities.GeneralConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,34 +66,20 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public LoginResponse authenticateUser(JwtRequest request) {
-        if (request.username().isEmpty() || request.password().isEmpty()) {
-            throw  new UserNotFoundException("Missing username and/or password.");
-          }
-          
-          UserDetails userDetails = currentUserDetails.loadUserByUsername(request.username());
+    public LoginResponse authenticateUser(final JwtRequest request) {
+          final UserDetails userDetails = currentUserDetails.loadUserByUsername(request.username());
           if (Objects.isNull(userDetails)) {
               createDefaultAdminUser();
-              throw  new UserNotFoundException("Invalid username and/or password.");
           }
-          
-          var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, request.password(), userDetails.getAuthorities());
-  
+          final var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, request.password(), Objects.isNull(userDetails) ? List.of() : userDetails.getAuthorities());
           authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-  
-          if (!usernamePasswordAuthenticationToken.isAuthenticated()) {
-              throw  new UserNotFoundException("Invalid username and/or password.");
-          }
-          SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-          
-          var user = findUserByUserName(userDetails.getUsername());
-
+          final var user = findUserByUserName(request.username());
           return new LoginResponse(true, "Login Was Successful", JwtTokenUtil.createToken(user));
     }
 
 
     private void createDefaultAdminUser(){
-        if (this.userRepository.findAll().isEmpty()) {
+        if (this.userRepository.findAll().stream().filter(u -> u.getRole().equals(GeneralConstants.ROLE_ADMIN)).findFirst().isEmpty()) {
             UserDto userDto = new UserDto(GeneralConstants.DEFAULT_ADMIN_USER_NAME, GeneralConstants.DEFAULT_ADMIN_PASSWORD);
             this.createUser(userDto, null);
         }

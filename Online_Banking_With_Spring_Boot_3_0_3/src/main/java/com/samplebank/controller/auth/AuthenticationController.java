@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     private final UserService userService;
 
-    @PostMapping(value = GeneralConstants.AUTHENTICATION_ENDPOINT+"authenticate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = GeneralConstants.AUTHENTICATION_ENDPOINT+"authenticate")
     public ResponseEntity<LoginResponse> createClient(@Valid @RequestBody JwtRequest jwtRequest){
         return new ResponseEntity<>(userService.authenticateUser(jwtRequest), HttpStatus.OK);
     }

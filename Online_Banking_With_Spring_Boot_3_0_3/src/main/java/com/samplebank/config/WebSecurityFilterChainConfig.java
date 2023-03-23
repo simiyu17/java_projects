@@ -4,26 +4,21 @@
  */
 package com.samplebank.config;
 
-import com.samplebank.security.JWTAuthenticationFilter;
 import com.samplebank.security.JWTAuthorizationFilter;
-import com.samplebank.security.UserServiceImpl;
+import com.samplebank.security.error.RestAccessDeniedHandler;
 import com.samplebank.utilities.GeneralConstants;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  *
@@ -31,11 +26,19 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
  */
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class WebSecurityFilterChainConfig {
 
-    private final AuthenticationProvider authenticationProvider;
-    private final JWTAuthorizationFilter jwtAuthorizationFilter;
+    private AuthenticationProvider authenticationProvider;
+    private JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    private AuthenticationEntryPoint authEntryPoint;
+
+    public WebSecurityFilterChainConfig(AuthenticationProvider authenticationProvider, JWTAuthorizationFilter jwtAuthorizationFilter,
+            @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authEntryPoint) {
+        this.authenticationProvider = authenticationProvider;
+        this.jwtAuthorizationFilter = jwtAuthorizationFilter;
+        this.authEntryPoint = authEntryPoint;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,7 +56,11 @@ public class WebSecurityFilterChainConfig {
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutUrl("/auth/logout")
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .and()
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(new RestAccessDeniedHandler()));
 
         return http.build();
     }
