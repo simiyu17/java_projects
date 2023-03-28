@@ -1,9 +1,15 @@
 package com.samplebank.service.client;
 
 import com.samplebank.dto.ClientDto;
-import com.samplebank.entity.Client;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
 
 public interface ClientService {
 
-    Client createClient(ClientDto clientDto);
+    void createClient(ClientDto clientDto);
+
+    ClientDto findClientById(@NotNull Long clientId);
+
+    Page<ClientDto> getAvailableClients();
+
 }

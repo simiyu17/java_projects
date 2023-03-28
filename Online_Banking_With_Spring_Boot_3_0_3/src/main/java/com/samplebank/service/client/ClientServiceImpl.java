@@ -6,6 +6,7 @@ import com.samplebank.entity.Client;
 import com.samplebank.repository.ClientRepository;
 import com.samplebank.security.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +19,18 @@ public class ClientServiceImpl implements ClientService{
 
     @Transactional
     @Override
-    public Client createClient(ClientDto clientDto) {
+    public void createClient(ClientDto clientDto) {
         var client = clientRepository.save(Client.createClient(clientDto));
         var user = userService.createUser(new UserDto(client.getEmailAddress(), client.getEmailAddress()), client);
         user.setUserClient(client);
-        return client;
+    }
+
+    @Override public ClientDto findClientById(Long clientId) {
+        return null;
+    }
+
+    @Override public Page<ClientDto> getAvailableClients() {
+        return null;
     }
 
 }
