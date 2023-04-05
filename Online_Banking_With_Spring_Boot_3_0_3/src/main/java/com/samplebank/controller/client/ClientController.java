@@ -1,11 +1,17 @@
 package com.samplebank.controller.client;
 
 import com.samplebank.dto.ClientDto;
+import com.samplebank.entity.User;
 import com.samplebank.service.client.ClientService;
 import com.samplebank.utilities.GeneralConstants;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +28,18 @@ public class ClientController {
         return new ResponseEntity<>("Client Successfully Created !!", HttpStatus.CREATED);
     }
 
-    @PostMapping(GeneralConstants.CLIENT_ENDPOINT+"balance")
-    public ResponseEntity<String> getBalance(){
-        return new ResponseEntity<>("Your current balance is KES 20, 000", HttpStatus.CREATED);
+    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"client/{id}")
+    public ResponseEntity<ClientDto> getClient(@PathVariable("id") Long id){
+        return new ResponseEntity<>(clientService.findClientById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(GeneralConstants.CLIENT_ENDPOINT+"my-client-profile")
+    public ResponseEntity<ClientDto> getMyProfile(Authentication authentication){
+        return new ResponseEntity<>(clientService.findClientByUser(authentication), HttpStatus.OK);
+    }
+
+    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"clients")
+    public ResponseEntity<List<ClientDto>> getClients(){
+        return new ResponseEntity<>(clientService.getAvailableClients(), HttpStatus.OK);
     }
 }

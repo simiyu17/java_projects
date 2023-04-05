@@ -12,12 +12,14 @@ import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author simiyu
  */
 @Getter
+@Setter
 public class ClientDto implements Serializable{
     
     private Long id;
@@ -26,11 +28,11 @@ public class ClientDto implements Serializable{
 
     private String lastName;
 
-    private String joinedDate;
+    private LocalDate joinedDate;
 
-    private String activationDate;
+    private LocalDate activationDate;
 
-    private String closedDate;
+    private LocalDate closedDate;
 
     private String gender;
 

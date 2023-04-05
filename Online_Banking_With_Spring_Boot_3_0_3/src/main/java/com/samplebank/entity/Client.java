@@ -74,7 +74,7 @@ public class Client extends BaseEntity {
         this.user = thisUser;
     }
 
-    enum Gender {
+    public enum Gender {
         MALE, FEMALE;
 
         public static Gender fromString(String gender) {
@@ -88,7 +88,7 @@ public class Client extends BaseEntity {
         }
     }
 
-    enum ClientStatus {
+    public enum ClientStatus {
         ACTIVE, CLOSED
     }
 

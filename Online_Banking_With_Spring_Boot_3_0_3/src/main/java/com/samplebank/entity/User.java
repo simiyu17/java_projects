@@ -60,5 +60,8 @@ public class User extends BaseEntity {
         client.upDateUser(this);
     }
 
+    public void updatePassWord(String newEncodedPassword){
+        this.password = newEncodedPassword;
+    }
 
 }

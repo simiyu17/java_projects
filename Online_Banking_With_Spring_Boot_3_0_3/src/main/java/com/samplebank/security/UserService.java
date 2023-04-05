@@ -4,12 +4,16 @@
  */
 package com.samplebank.security;
 
+import com.samplebank.dto.ChangePasswordDto;
 import com.samplebank.dto.JwtRequest;
 import com.samplebank.dto.LoginResponse;
 import com.samplebank.dto.UserDto;
 import com.samplebank.entity.Client;
 import com.samplebank.entity.User;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  *
@@ -18,10 +22,12 @@ import jakarta.validation.constraints.NotNull;
 public interface UserService {
     
     User createUser(UserDto userDto, Client client);
+
+    UserDto findUserById(Long id);
+
+    List<UserDto> findAvailableUsers();
     
-    User findUserById(Long id);
-    
-    User updateUser(User user);
+    void changeUserPassword(@NotNull Long id, @NotBlank ChangePasswordDto changePasswordDto);
     
     User findUserByUserName(String userName);
     

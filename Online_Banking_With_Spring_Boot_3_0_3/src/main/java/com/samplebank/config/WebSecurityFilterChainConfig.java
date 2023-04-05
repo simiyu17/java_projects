@@ -28,10 +28,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityFilterChainConfig {
 
-    private AuthenticationProvider authenticationProvider;
-    private JWTAuthorizationFilter jwtAuthorizationFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
-    private AuthenticationEntryPoint authEntryPoint;
+    private final AuthenticationEntryPoint authEntryPoint;
 
     public WebSecurityFilterChainConfig(AuthenticationProvider authenticationProvider, JWTAuthorizationFilter jwtAuthorizationFilter,
             @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authEntryPoint) {
