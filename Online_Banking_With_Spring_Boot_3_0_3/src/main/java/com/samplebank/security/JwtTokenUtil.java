@@ -1,6 +1,6 @@
 package com.samplebank.security;
 
-import com.samplebank.entity.User;
+import com.samplebank.auth.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

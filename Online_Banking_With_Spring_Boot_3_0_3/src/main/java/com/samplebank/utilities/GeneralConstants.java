@@ -13,5 +13,8 @@ public interface GeneralConstants {
 
     // Default Admin User
     String DEFAULT_ADMIN_USER_NAME = "admin@admin.com";
-    String DEFAULT_ADMIN_PASSWORD = "password@321";
+    String DEFAULT_ADMIN_PASSWORD = "admin@123";
+
+    // Default Messages
+    String RESOURCE_SUCCESSFULLY_POSTED_MESSAGE = "Resource successfully created!!";
 }

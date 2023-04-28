@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.samplebank.config;
 
 import com.samplebank.security.JWTAuthorizationFilter;
 import com.samplebank.security.error.RestAccessDeniedHandler;
 import com.samplebank.utilities.GeneralConstants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,10 +50,10 @@ public class WebSecurityFilterChainConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/auth/logout")
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                .and()
+                .logout(logout ->{
+                    logout.logoutUrl("/auth/logout");
+                    logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+                })
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authEntryPoint)
                         .accessDeniedHandler(new RestAccessDeniedHandler()));
