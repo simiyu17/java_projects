@@ -6,10 +6,12 @@ import com.samplebank.account.dto.ClientAccountCriteria;
 import com.samplebank.account.dto.ClientAccountDto;
 import com.samplebank.account.mapper.ClientAccountMapper;
 import com.samplebank.client.domain.ClientRepositoryWrapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClientAccountServiceImpl implements ClientAccountService{
@@ -38,6 +40,13 @@ public class ClientAccountServiceImpl implements ClientAccountService{
 
     @Override
     public List<ClientAccountDto> getClientAccounts(Long clientId, String status) {
-        return this.clientAccountMapper.fromEntity(this.clientAccountRepositoryWrapper.getClientAccounts(new ClientAccountCriteria(clientId, ClientAccount.AccountStatus.valueOf(status))));
+        final var accountStatus = Objects.isNull(status) ? null : ClientAccount.AccountStatus.valueOf(status);
+        return this.clientAccountMapper.fromEntity(this.clientAccountRepositoryWrapper.getClientAccounts(new ClientAccountCriteria(clientId, accountStatus)));
+    }
+
+    @Override
+    public List<ClientAccountDto> getMyClientAccounts(Authentication authentication, String status) {
+        var client = this.clientRepository.findLoggedInClient(authentication);
+        return this.getClientAccounts(client.getId(), status);
     }
 }

@@ -43,10 +43,18 @@ public class ClientRepositoryWrapper {
 
     public ClientDto findClientByUser(Authentication authentication) {
         var user = userService.findUserByUserName(authentication.getName());
-        if(Objects.isNull(user) || Objects.isNull(user.getClient())){
+        if(Objects.isNull(user.getClient())){
             throw new ClientNotFoundException("No Client found with given authentication");
         }
         return this.clientMapper.fromEntity(user.getClient());
+    }
+
+    public Client findLoggedInClient(Authentication authentication) {
+        var user = userService.findUserByUserName(authentication.getName());
+        if(Objects.isNull(user.getClient())){
+            throw new ClientNotFoundException("No Client found with given authentication");
+        }
+        return user.getClient();
     }
 
     public List<ClientDto> getAvailableClients() {
