@@ -44,6 +44,7 @@ public class JwtTokenUtil {
                 .setSubject(user.getUsername())
                 .claim("user_id", user.getId())
                 .claim("user_full_name", user.getUserFullNameFromClient())
+                .claim("user_role", user.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET.getBytes())

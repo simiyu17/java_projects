@@ -2,8 +2,6 @@
 package com.samplebank.auth.dto;
 
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * @author simiyu
