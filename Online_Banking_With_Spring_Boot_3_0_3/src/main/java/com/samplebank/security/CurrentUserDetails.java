@@ -1,7 +1,6 @@
 package com.samplebank.security;
 
 import com.samplebank.auth.domain.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +14,13 @@ import java.util.HashSet;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class CurrentUserDetails implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    public CurrentUserDetails(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Transactional(readOnly = true)
     @Override

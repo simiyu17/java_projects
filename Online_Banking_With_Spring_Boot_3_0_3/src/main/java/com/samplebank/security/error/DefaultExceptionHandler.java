@@ -19,7 +19,7 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ AuthenticationException.class })
     public ResponseEntity<ErrorMessage> handleAuthenticationException(Exception ex, WebRequest request) {
-        final var message = new ErrorMessage(HttpStatus.BAD_GATEWAY, LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        final var message = new ErrorMessage(HttpStatus.UNAUTHORIZED, LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return HelperUtil.buildResponseEntity(message);
     }
 

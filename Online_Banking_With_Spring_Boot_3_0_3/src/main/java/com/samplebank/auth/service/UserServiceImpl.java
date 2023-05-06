@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
           }else {
               final var user = findUserByUserName(userDetails.getUsername());
               this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, request.password(), userDetails.getAuthorities()));
-              return new LoginResponse(true, "Login Was Successful", JwtTokenUtil.createToken(user));
+              return new LoginResponse(true, "Login Was Successful", this.userMapper.fromEntity(user), JwtTokenUtil.createToken(user));
           }
 
     }

@@ -1,0 +1,2 @@
+insert into clients(id, first_name, last_name, joined_date, activation_date, gender, client_status, client_government_id, cell_phone, email_address)
+values (10001, 'John', 'Doe', '2023-04-21', '2023-04-21', 'MALE', 'ACTIVE', '65748374', '254753645263', 'john.doe2@gmail.com');

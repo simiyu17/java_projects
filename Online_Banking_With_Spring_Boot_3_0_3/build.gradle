@@ -45,11 +45,14 @@ dependencies {
             "org.mapstruct:mapstruct-processor:${mapStructVersion}"
     )
     implementation "org.mapstruct:mapstruct:${mapStructVersion}"
+    testImplementation('org.testcontainers:junit-jupiter:1.18.0')
+    testImplementation('org.testcontainers:postgresql:1.18.0')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
