@@ -28,9 +28,9 @@ public class ClientAccountServiceImpl implements ClientAccountService{
 
     @Transactional
     @Override
-    public void createClientAccount(Long clientId, ClientAccountDto clientAccountDto) {
+    public void createClientAccount(Long clientId) {
         var client = this.clientRepository.findClById(clientId);
-        this.clientAccountRepositoryWrapper.saveClientAccount(client, clientAccountDto);
+        this.clientAccountRepositoryWrapper.saveClientAccount(client);
     }
 
     @Override

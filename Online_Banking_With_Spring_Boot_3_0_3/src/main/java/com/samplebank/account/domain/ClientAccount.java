@@ -70,17 +70,13 @@ public class ClientAccount extends BaseEntity {
         ACTIVE, INACTIVE;
     }
 
-    public static ClientAccount createClientAccount(Client client, ClientAccountDto clientAccountDto){
-        return new ClientAccount(client, AccountType.valueOf(clientAccountDto.accountType()), clientAccountDto.accountNumber());
+    public static ClientAccount createClientAccount(Client client, String accountNumber){
+        return new ClientAccount(client, AccountType.CHECKING_ACCOUNT, accountNumber);
     }
 
     public void addTransaction(AccountTransaction transaction){
         this.accountTransactions.add(transaction);
         transaction.setClientAccount(this);
-    }
-
-    public void setAccountNumber(String accountNumber){
-        this.accountNumber = accountNumber;
     }
 
     @Override

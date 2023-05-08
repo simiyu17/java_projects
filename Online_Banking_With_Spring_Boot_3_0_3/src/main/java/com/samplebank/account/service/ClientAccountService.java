@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ClientAccountService {
 
-    void createClientAccount(@NotNull Long clientId, @NotNull ClientAccountDto clientAccountDto);
+    void createClientAccount(@NotNull Long clientId);
 
     ClientAccountDto getAccountById(Long accountId);
 

@@ -16,6 +16,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -34,7 +35,10 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
     implementation "org.apache.commons:commons-lang3:${apacheCommonLang3Version}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0"
     compileOnly 'org.projectlombok:lombok'
+    compileOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly 'org.postgresql:postgresql'
     implementation("com.querydsl:querydsl-core:${queryDslVersion}")
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")

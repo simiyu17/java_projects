@@ -29,6 +29,17 @@ public class WebSecurityFilterChainConfig {
 
     private final AuthenticationEntryPoint authEntryPoint;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/banking-openapi/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/swagger-ui.html"
+    };
+
     public WebSecurityFilterChainConfig(AuthenticationProvider authenticationProvider, JWTAuthorizationFilter jwtAuthorizationFilter,
             @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authEntryPoint) {
         this.authenticationProvider = authenticationProvider;
@@ -44,7 +55,7 @@ public class WebSecurityFilterChainConfig {
                 .cors()
                 .and()
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**").permitAll();
+                    auth.requestMatchers(AUTH_WHITELIST).permitAll();
                     auth.requestMatchers(GeneralConstants.CLIENT_ENDPOINT+"**").hasRole("CLIENT");
                     auth.requestMatchers(GeneralConstants.ADMIN_ENDPOINT+"**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();

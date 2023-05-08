@@ -28,7 +28,7 @@ public class ClientController {
         return new ResponseEntity<>("Client Successfully Created !!", HttpStatus.CREATED);
     }
 
-    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"client/{id}")
+    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"clients/{id}")
     public ResponseEntity<ClientDto> getClient(@PathVariable("id") Long id){
         return new ResponseEntity<>(clientService.findClientById(id), HttpStatus.OK);
     }

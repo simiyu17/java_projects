@@ -22,14 +22,19 @@ public class ClientAccountController {
     }
 
     @PostMapping(GeneralConstants.ADMIN_ENDPOINT+"client-accounts/{client-id}")
-    public ResponseEntity<ApiResponse> createClientAccount(@PathVariable("client-id") Long clientId,  @RequestBody @Valid ClientAccountDto clientAccountDto){
-        this.clientAccountService.createClientAccount(clientId, clientAccountDto);
+    public ResponseEntity<ApiResponse> createClientAccount(@PathVariable("client-id") Long clientId){
+        this.clientAccountService.createClientAccount(clientId);
         return new ResponseEntity<>(new ApiResponse(true, GeneralConstants.RESOURCE_SUCCESSFULLY_POSTED_MESSAGE), HttpStatus.CREATED);
     }
 
-    @GetMapping(GeneralConstants.CLIENT_ENDPOINT+"client-accounts/{account-id}")
+    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"client-accounts/{account-id}")
     public ResponseEntity<ClientAccountDto> getClientAccount(@PathVariable("account-id") Long accountId){
         return new ResponseEntity<>(this.clientAccountService.getAccountById(accountId), HttpStatus.OK);
+    }
+
+    @GetMapping(GeneralConstants.ADMIN_ENDPOINT+"client-accounts/{client-id}/accounts")
+    public ResponseEntity<List<ClientAccountDto>> getClientAccounts(@PathVariable("client-id") Long clientId){
+        return new ResponseEntity<>(this.clientAccountService.getClientAccounts(clientId, null), HttpStatus.OK);
     }
 
     @GetMapping(GeneralConstants.CLIENT_ENDPOINT+"my-accounts")

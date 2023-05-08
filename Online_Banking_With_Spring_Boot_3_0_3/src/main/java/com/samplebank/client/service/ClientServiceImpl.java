@@ -1,10 +1,10 @@
 package com.samplebank.client.service;
 
+import com.samplebank.account.service.ClientAccountService;
 import com.samplebank.client.domain.ClientRepositoryWrapper;
 import com.samplebank.client.dto.ClientDto;
 import com.samplebank.shared.exceptions.DataRulesViolationException;
 import jakarta.persistence.PersistenceException;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -15,16 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService{
 
     private final ClientRepositoryWrapper clientRepositoryWrapper;
+    private final ClientAccountService clientAccountService;
+
+    public ClientServiceImpl(ClientRepositoryWrapper clientRepositoryWrapper, ClientAccountService clientAccountService) {
+        this.clientRepositoryWrapper = clientRepositoryWrapper;
+        this.clientAccountService = clientAccountService;
+    }
 
     @Transactional
     @Override
     public void createClient(ClientDto clientDto) {
             try {
-                this.clientRepositoryWrapper.createClientWithAssociatedUser(clientDto);
+                final var client = this.clientRepositoryWrapper.createClientWithAssociatedUser(clientDto);
+                this.clientAccountService.createClientAccount(client.getId());
             } catch (final JpaSystemException | DataIntegrityViolationException dve) {
                 handleException(dve);
             } catch (final PersistenceException dve) {

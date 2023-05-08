@@ -27,10 +27,11 @@ public class ClientRepositoryWrapper {
     }
 
     @Transactional
-    public void createClientWithAssociatedUser(ClientDto clientDto){
-        var client = clientRepository.saveAndFlush(Client.createClient(clientDto));
+    public Client createClientWithAssociatedUser(ClientDto clientDto){
+        var client = clientRepository.save(Client.createClient(clientDto));
         var user = userService.createUser(new UserDto(client.getEmailAddress(), client.getEmailAddress()), client);
         user.ifPresent(value -> value.setUserClient(client));
+        return client;
     }
 
     public ClientDto findClientById(Long clientId) {

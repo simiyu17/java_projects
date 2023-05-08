@@ -1,11 +1,11 @@
 package com.samplebank.account.domain;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.samplebank.account.dto.ClientAccountCriteria;
 import com.samplebank.account.dto.ClientAccountDto;
 import com.samplebank.account.exception.AccountNotFoundException;
 import com.samplebank.account.querybuilder.ClientAccountQueryBuilder;
 import com.samplebank.client.domain.Client;
+import com.samplebank.config.ApplicationConfig;
 import com.samplebank.utilities.AccountUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +18,19 @@ public class ClientAccountRepositoryWrapper {
 
     private final ClientAccountRepository clientAccountRepository;
     private final ClientAccountQueryBuilder queryBuilder;
+    private final ApplicationConfig applicationConfig;
 
-    public ClientAccountRepositoryWrapper(ClientAccountRepository clientAccountRepository, ClientAccountQueryBuilder queryBuilder) {
+
+    public ClientAccountRepositoryWrapper(ClientAccountRepository clientAccountRepository, ClientAccountQueryBuilder queryBuilder, ApplicationConfig applicationConfig) {
         this.clientAccountRepository = clientAccountRepository;
         this.queryBuilder = queryBuilder;
+        this.applicationConfig = applicationConfig;
     }
 
     @Transactional
-    public void saveClientAccount(Client client, ClientAccountDto clientAccountDto){
-        var clientAccount = ClientAccount.createClientAccount(client, clientAccountDto);
-        clientAccount.setAccountNumber(AccountUtil.generateClientAccountNumber());
+    public void saveClientAccount(Client client){
+        final var clientAccountNumber = AccountUtil.generateClientAccountNumber(client.getId(), applicationConfig.getClientAccountLength());
+        var clientAccount = ClientAccount.createClientAccount(client, clientAccountNumber);
         this.clientAccountRepository.save(clientAccount);
     }
 
