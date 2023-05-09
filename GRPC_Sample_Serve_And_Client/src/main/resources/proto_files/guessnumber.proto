@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "org.grpc.sample.server";
+option java_multiple_files = true;
+
+// Guess service definition
+service GuessNumber {
+  rpc letUsSeeHowLuckyYouMayBe (GuessRequest) returns (HowLuckyResponse) {}
+}
+
+// Guess request DTO
+message GuessRequest {
+  int64 guessedNumber = 1;
+}
+
+// Response DTO
+message HowLuckyResponse {
+  bool isLucky = 1;
+  string message = 2;
+}
