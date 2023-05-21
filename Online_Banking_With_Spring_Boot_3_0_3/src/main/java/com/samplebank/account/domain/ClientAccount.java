@@ -1,15 +1,14 @@
 package com.samplebank.account.domain;
 
-import com.samplebank.account.dto.ClientAccountDto;
 import com.samplebank.client.domain.Client;
 import com.samplebank.shared.entity.BaseEntity;
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
-import java.util.Set;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Getter
 @Entity

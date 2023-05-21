@@ -1,5 +1,7 @@
 package com.samplebank.account.domain;
 
+import com.samplebank.account.dto.AccountTransactionDto;
+import com.samplebank.client.domain.Client;
 import com.samplebank.shared.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,6 +31,19 @@ public class AccountTransaction extends BaseEntity implements Comparable<Account
 
     private BigDecimal amount;
 
+    private AccountTransaction(){}
+
+    private AccountTransaction(ClientAccount clientAccount, TransactionType transactionType, String description, BigDecimal amount) {
+        this.clientAccount = clientAccount;
+        this.transactionType = transactionType;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    public static AccountTransaction createAccountTransaction(AccountTransactionDto transaction, ClientAccount clientAccount){
+        return new AccountTransaction(clientAccount, TransactionType.valueOf(transaction.transactionType()), transaction.description(), transaction.amount());
+    }
+
     public enum TransactionType{
         DEPOSIT("Deposit"),
         WITHDRAW("Withdraw"),
@@ -44,6 +59,7 @@ public class AccountTransaction extends BaseEntity implements Comparable<Account
         public String getName() {
             return name;
         }
+
     }
 
     public void setClientAccount(ClientAccount account){
