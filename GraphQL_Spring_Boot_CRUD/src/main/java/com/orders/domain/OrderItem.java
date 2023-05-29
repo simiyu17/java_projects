@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "order_item")
@@ -31,16 +32,16 @@ public class OrderItem implements Serializable {
     protected OrderItem() {
     }
 
-    private OrderItem(String name, String description, int quantity, BigDecimal unitPrice, BigDecimal amount) {
+    private OrderItem(String name, String description, int quantity, BigDecimal unitPrice) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.amount = amount;
+        this.amount = this.unitPrice.multiply(new BigDecimal(this.quantity)).setScale(2, RoundingMode.HALF_UP);
     }
 
     public static OrderItem createOrderItem(OrderItemDto orderItemDto){
-        return new OrderItem(orderItemDto.getName(), orderItemDto.getItemDescription(), orderItemDto.getQuantity(), orderItemDto.getPrice(), orderItemDto.getTotalAmount());
+        return new OrderItem(orderItemDto.getName(), orderItemDto.getItemDescription(), orderItemDto.getQuantity(), orderItemDto.getPrice());
     }
 
     public Long getId() {

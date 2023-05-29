@@ -22,4 +22,5 @@ type Query {
 type Mutation {
     createOrder(vendorName: String!): Order
     addItemsToAnOrder(itemName: String!, itemDescription: String!, quantity: Int!, unitPrice: Int!, orderId: ID!): Order
+    createOrderWithItems(vendorName: String!, orderItems: [OrderItemInput!]!): Order
 }

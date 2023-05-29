@@ -16,3 +16,10 @@ type OrderItem {
     unitPrice: Int!
     amount: Int
 }
+
+input OrderItemInput {
+    name: String!
+    itemDescription: String!
+    quantity: Int!
+    price: Int!
+}

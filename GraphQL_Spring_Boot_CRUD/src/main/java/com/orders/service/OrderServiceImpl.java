@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -23,6 +24,13 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order saveOrder(String vendorName) {
         var order = Order.createOrder(vendorName, generateOrderNumber(), LocalDate.now());
+        return this.orderRepositoryWrapper.saveOrder(order);
+    }
+
+    @Override
+    public Order saveOrderWithItems(String vendorName, Set<OrderItemDto> orderItems) {
+        var order = Order.createOrder(vendorName, generateOrderNumber(), LocalDate.now());
+        orderItems.forEach(item -> order.addOrderItem(OrderItem.createOrderItem(item)));
         return this.orderRepositoryWrapper.saveOrder(order);
     }
 

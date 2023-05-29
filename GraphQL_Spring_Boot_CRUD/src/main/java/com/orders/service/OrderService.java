@@ -5,10 +5,13 @@ import com.orders.dto.OrderItemDto;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Set;
 
 public interface OrderService {
 
     Order saveOrder(String vendorName);
+
+    Order saveOrderWithItems(final String vendorName, final Set<OrderItemDto> orderItems);
 
     Order addOrderItem(OrderItemDto orderItemDto);
     Order findOrderById(Long id);

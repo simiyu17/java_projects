@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class OrderController {
@@ -28,6 +29,11 @@ public class OrderController {
     public Order addItemsToAnOrder(@Argument String itemName, @Argument String itemDescription, @Argument int quantity, @Argument BigDecimal unitPrice, @Argument Long orderId){
         var orderItem = new OrderItemDto(itemName, itemDescription, quantity, unitPrice, orderId);
         return this.orderService.addOrderItem(orderItem);
+    }
+
+    @MutationMapping
+    public Order createOrderWithItems(@Argument String vendorName, @Argument Set<OrderItemDto> orderItems){
+        return this.orderService.saveOrderWithItems(vendorName, orderItems);
     }
 
     @QueryMapping

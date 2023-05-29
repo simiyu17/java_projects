@@ -2,6 +2,7 @@ package com.orders.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class OrderItemDto implements Serializable {
 
@@ -19,12 +20,23 @@ public class OrderItemDto implements Serializable {
 
     private Long orderId;
 
+    protected OrderItemDto(){}
+
+    public OrderItemDto(String name, String itemDescription, int quantity, BigDecimal price) {
+        this.name = name;
+        this.itemDescription = itemDescription;
+        this.quantity = quantity;
+        this.price = price;
+        this.totalAmount = this.price.multiply(new BigDecimal(this.quantity)).setScale(2, RoundingMode.HALF_UP);
+    }
+
     public OrderItemDto(String name, String itemDescription, int quantity, BigDecimal price, Long orderId) {
         this.name = name;
         this.itemDescription = itemDescription;
         this.quantity = quantity;
         this.price = price;
         this.orderId = orderId;
+        this.totalAmount = this.price.multiply(new BigDecimal(this.quantity)).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Long getItemId() {
