@@ -31,10 +31,12 @@ public class WebSecurityFilterChainConfig {
 
     private static final String[] AUTH_WHITELIST = {
             "/auth/**",
+            "/v2/api-docs/**",
+            "/v2/api-docs.yaml",
             "/v3/api-docs/**",
             "/v3/api-docs.yaml",
             "/swagger-ui/**",
-            "/banking-openapi/**",
+            "/banking-openapi.html",
             "/swagger-resources/**",
             "/webjars/**",
             "/swagger-ui.html"

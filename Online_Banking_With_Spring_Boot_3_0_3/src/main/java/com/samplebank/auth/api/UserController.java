@@ -3,8 +3,8 @@ package com.samplebank.auth.api;
 import com.samplebank.auth.dto.ChangePasswordDto;
 import com.samplebank.auth.dto.UserDto;
 import com.samplebank.auth.service.UserService;
+import com.samplebank.shared.annotations.RestControllerWithOpenAPI;
 import com.samplebank.utilities.GeneralConstants;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.util.List;
+
+@RestControllerWithOpenAPI
 @RequiredArgsConstructor
 public class UserController {
 

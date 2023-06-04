@@ -2,9 +2,8 @@ package com.samplebank.client.api;
 
 import com.samplebank.client.dto.ClientDto;
 import com.samplebank.client.service.ClientService;
+import com.samplebank.shared.annotations.RestControllerWithOpenAPI;
 import com.samplebank.utilities.GeneralConstants;
-import java.util.List;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.util.List;
+
+@RestControllerWithOpenAPI
 @RequiredArgsConstructor
 public class ClientController {
     
