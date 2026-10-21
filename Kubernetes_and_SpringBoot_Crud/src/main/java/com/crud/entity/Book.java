@@ -55,5 +55,7 @@ public class Book implements Serializable {
 		this.datePublished = datePublished;
 	}
 
-	
+	@Override public String toString() {
+		return "Book{" + "id=" + id + ", name='" + name + '\'' + ", author='" + author + '\'' + ", datePublished=" + datePublished + '}';
+	}
 }

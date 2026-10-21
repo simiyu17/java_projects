@@ -26,8 +26,8 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Long> implements BookDao{
     }
 
     @Override
-    public Book findById(Long Id) {
-        return findEntityById(Id);
+    public Book findById(Long bookId) {
+        return findEntityById(bookId);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Long> implements BookDao{
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
 
-        List<Predicate> predicates = new ArrayList<Predicate>();
+        List<Predicate> predicates = new ArrayList<>();
         
         if (nameOrAuthor != null) {
             Predicate sname = builder.like(root.get("bookName"), "%"+nameOrAuthor+"%");
@@ -44,7 +44,7 @@ public class BookDaoImpl extends GenericDaoImpl<Book, Long> implements BookDao{
             predicates.add(builder.or(sname, fname));
         }
         
-        if (predicates.size() > 0) {
+        if (!predicates.isEmpty()) {
             criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
         }
         return findByCriteria(-1, -1, criteria.select(root));

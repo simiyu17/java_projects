@@ -1,0 +1,26 @@
+
+type OrderDto {
+    vendorName: String!
+    orderItems: [OrderItemDto]!
+}
+
+type Order {
+    id: ID!
+    orderNumber: String!
+    orderDate: String
+    vendorName: String!
+    status: String
+    orderItems: [OrderItem!]
+}
+
+type Query {
+    allAvailableOrders(status: String): [Order]
+    findOrderById(orderId: ID!): Order
+    findOrderByOrderNumber(orderNumber: String!): Order
+}
+
+type Mutation {
+    createOrder(vendorName: String!): Order
+    addItemsToAnOrder(itemName: String!, itemDescription: String!, quantity: Int!, unitPrice: Int!, orderId: ID!): Order
+    createOrderWithItems(vendorName: String!, orderItems: [OrderItemInput!]!): Order
+}

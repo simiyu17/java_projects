@@ -1,0 +1,25 @@
+
+type OrderItemDto {
+    itemId: ID
+    name: String!
+    itemDescription: String!
+    quantity: Int!
+    price: Int!
+    totalAmount: Int
+}
+
+type OrderItem {
+    id: ID!
+    name: String!
+    description: String!
+    quantity: Int!
+    unitPrice: Int!
+    amount: Int
+}
+
+input OrderItemInput {
+    name: String!
+    itemDescription: String!
+    quantity: Int!
+    price: Int!
+}
